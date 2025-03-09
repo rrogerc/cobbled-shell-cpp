@@ -19,9 +19,6 @@ int main()
     std::vector<std::string> path;
     get_path_env(path);
 
-    // for (auto i : path)
-    //     std::cout << i << "\n";
-
     while (1)
     {
         std::cout << "$ ";
@@ -54,7 +51,8 @@ int main()
         }
         else
         {
-            std::cout << raw_input << ": command not found\n";
+            if (!handle_execution(input, path))
+                std::cout << raw_input << ": command not found\n";
         }
     }
 }
