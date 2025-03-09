@@ -27,6 +27,24 @@ void handle_echo(std::vector<std::string> &args)
     std::cout << "\n";
 }
 
+void handle_type(std::string command)
+{
+
+    std::vector<std::string> builtins = {"echo", "type", "exit"};
+
+    for (auto i : builtins)
+    {
+        // std::cout << i << " :\n";
+        if (command == i)
+        {
+            std::cout << command << " is a shell builtin\n";
+            return;
+        }
+    }
+
+    std::cout << command << ": not found\n";
+}
+
 int main()
 {
     // Flush after every std::cout / std:cerr
@@ -60,6 +78,12 @@ int main()
         else if (input[0] == "echo")
         {
             handle_echo(input);
+        }
+        else if (input[0] == "type")
+        {
+            if (input.size() == 1)
+                continue;
+            handle_type(input[1]);
         }
         else
         {
