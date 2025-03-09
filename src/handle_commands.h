@@ -9,5 +9,6 @@ void handle_echo(std::vector<std::string> &args);
 void handle_type(std::string command, std::vector<std::string> &path);
 bool handle_execution(std::vector<std::string> &input, std::vector<std::string> &path);
 void handle_pwd();
+void handle_cd(std::vector<std::string> &input);
 
 #endif
