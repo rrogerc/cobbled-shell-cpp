@@ -51,3 +51,20 @@ void handle_type(std::string command, std::vector<std::string> &path)
     else
         std::cout << command << " is " << path_env_location << "\n";
 }
+
+bool handle_execution(std::vector<std::string> &input, std::vector<std::string> &path)
+{
+
+    std::string execution_path = find_path(input[0], path);
+    if (execution_path == "")
+        return false;
+
+    std::string command = input[0];
+
+    for (int i = 1; i < input.size(); i++)
+        command += " " + input[i];
+
+    std::system(command.c_str());
+
+    return true;
+}
