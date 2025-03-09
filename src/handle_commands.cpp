@@ -2,6 +2,7 @@
 #include "utils.h"
 
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
 #include <vector>
 
@@ -32,7 +33,7 @@ void handle_echo(std::vector<std::string> &args)
 
 void handle_type(std::string command, std::vector<std::string> &path)
 {
-    std::vector<std::string> builtins = {"echo", "type", "exit"};
+    std::vector<std::string> builtins = {"echo", "type", "exit", "pwd"};
 
     for (auto i : builtins)
     {
@@ -67,4 +68,9 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
     std::system(command.c_str());
 
     return true;
+}
+
+void handle_pwd()
+{
+    std::cout << std::filesystem::current_path().string() << "\n";
 }

@@ -49,6 +49,10 @@ int main()
                 continue;
             handle_type(input[1], path);
         }
+        else if (input[0] == "pwd")
+        {
+            handle_pwd();
+        }
         else
         {
             if (!handle_execution(input, path))
