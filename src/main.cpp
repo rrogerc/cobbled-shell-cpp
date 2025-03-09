@@ -1,3 +1,6 @@
+#include "utils.h"
+
+#include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -27,9 +30,8 @@ void handle_echo(std::vector<std::string> &args)
     std::cout << "\n";
 }
 
-void handle_type(std::string command)
+void handle_type(std::string command, std::vector<std::string> &path)
 {
-
     std::vector<std::string> builtins = {"echo", "type", "exit"};
 
     for (auto i : builtins)
@@ -42,7 +44,12 @@ void handle_type(std::string command)
         }
     }
 
-    std::cout << command << ": not found\n";
+    std::string path_env_location = find_path(command, path);
+
+    if (path_env_location == "")
+        std::cout << command << ": not found\n";
+    else
+        std::cout << command << " is " << path_env_location << "\n";
 }
 
 int main()
@@ -54,6 +61,12 @@ int main()
     std::string raw_input;
     std::stringstream ss;
     std::vector<std::string> input;
+
+    std::vector<std::string> path;
+    get_path_env(path);
+
+    // for (auto i : path)
+    //     std::cout << i << "\n";
 
     while (1)
     {
@@ -83,7 +96,7 @@ int main()
         {
             if (input.size() == 1)
                 continue;
-            handle_type(input[1]);
+            handle_type(input[1], path);
         }
         else
         {
