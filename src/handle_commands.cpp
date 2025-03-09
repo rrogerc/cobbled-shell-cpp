@@ -2,6 +2,7 @@
 #include "utils.h"
 
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
 #include <vector>
 
@@ -67,4 +68,9 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
     std::system(command.c_str());
 
     return true;
+}
+
+void handle_pwd()
+{
+    std::cout << std::filesystem::current_path().string() << "\n";
 }
