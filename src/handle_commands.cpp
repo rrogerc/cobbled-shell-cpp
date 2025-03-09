@@ -55,7 +55,6 @@ void handle_type(std::string command, std::vector<std::string> &path)
 
 bool handle_execution(std::vector<std::string> &input, std::vector<std::string> &path)
 {
-
     std::string execution_path = find_path(input[0], path);
     if (execution_path == "")
         return false;
@@ -73,4 +72,19 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
 void handle_pwd()
 {
     std::cout << std::filesystem::current_path().string() << "\n";
+}
+
+void handle_cd(std::vector<std::string> &input)
+{
+    std::string to_string = (input.size() == 1 ? "~" : input[1]);
+    std::filesystem::path to(to_string);
+
+    try
+    {
+        std::filesystem::current_path(to);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << "cd: " << to_string << ": No such file or directory\n";
+    }
 }

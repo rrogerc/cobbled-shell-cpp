@@ -53,6 +53,10 @@ int main()
         {
             handle_pwd();
         }
+        else if (input[0] == "cd")
+        {
+            handle_cd(input);
+        }
         else
         {
             if (!handle_execution(input, path))
