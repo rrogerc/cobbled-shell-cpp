@@ -1,6 +1,36 @@
+#include <algorithm>
+#include <cstdlib>
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <vector>
+
+void get_path_env(std::vector<std::string> &path)
+{
+    std::string raw_path = std::getenv("PATH");
+    // std::cout << raw_path << "\n";
+
+    raw_path += ":";
+    while (raw_path.length())
+    {
+        int delimeter = raw_path.find(":");
+        path.push_back(raw_path.substr(0, delimeter));
+        raw_path.erase(0, delimeter + 1);
+    }
+}
+
+std::string find_path(std::string command, std::vector<std::string> &path)
+{
+    std::string full_path;
+    for (int i = 0; i < path.size(); i++)
+    {
+        full_path = path[i] + "/" + command;
+
+        if (std::filesystem::exists(full_path))
+            return full_path;
+    }
+    return "";
+}
 
 void handle_exit(std::string code)
 {
@@ -27,9 +57,8 @@ void handle_echo(std::vector<std::string> &args)
     std::cout << "\n";
 }
 
-void handle_type(std::string command)
+void handle_type(std::string command, std::vector<std::string> &path)
 {
-
     std::vector<std::string> builtins = {"echo", "type", "exit"};
 
     for (auto i : builtins)
@@ -42,7 +71,12 @@ void handle_type(std::string command)
         }
     }
 
-    std::cout << command << ": not found\n";
+    std::string path_env_location = find_path(command, path);
+
+    if (path_env_location == "")
+        std::cout << command << ": not found\n";
+    else
+        std::cout << command << " is " << path_env_location << "\n";
 }
 
 int main()
@@ -54,6 +88,12 @@ int main()
     std::string raw_input;
     std::stringstream ss;
     std::vector<std::string> input;
+
+    std::vector<std::string> path;
+    get_path_env(path);
+
+    // for (auto i : path)
+    //     std::cout << i << "\n";
 
     while (1)
     {
@@ -83,7 +123,7 @@ int main()
         {
             if (input.size() == 1)
                 continue;
-            handle_type(input[1]);
+            handle_type(input[1], path);
         }
         else
         {
