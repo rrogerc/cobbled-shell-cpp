@@ -18,6 +18,15 @@ void handle_exit(std::string code)
     exit(error_code);
 }
 
+void handle_echo(std::vector<std::string> &args)
+{
+    int n = args.size();
+
+    for (int i = 1; i < n; i++)
+        std::cout << args[i] << " ";
+    std::cout << "\n";
+}
+
 int main()
 {
     // Flush after every std::cout / std:cerr
@@ -47,6 +56,10 @@ int main()
         if (input[0] == "exit")
         {
             handle_exit((input.size() == 1 ? "0" : input[1]));
+        }
+        else if (input[0] == "echo")
+        {
+            handle_echo(input);
         }
         else
         {
