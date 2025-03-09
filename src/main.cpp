@@ -1,49 +1,10 @@
+#include "handle_commands.h"
+#include "utils.h"
+
+#include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <vector>
-
-void handle_exit(std::string code)
-{
-    int error_code;
-    // std::cout << " ::: " << code << " ::: \n";
-    try
-    {
-        error_code = stoi(code);
-    }
-    catch (std::exception &e)
-    {
-        error_code = 0;
-    }
-
-    exit(error_code);
-}
-
-void handle_echo(std::vector<std::string> &args)
-{
-    int n = args.size();
-
-    for (int i = 1; i < n; i++)
-        std::cout << args[i] << " ";
-    std::cout << "\n";
-}
-
-void handle_type(std::string command)
-{
-
-    std::vector<std::string> builtins = {"echo", "type", "exit"};
-
-    for (auto i : builtins)
-    {
-        // std::cout << i << " :\n";
-        if (command == i)
-        {
-            std::cout << command << " is a shell builtin\n";
-            return;
-        }
-    }
-
-    std::cout << command << ": not found\n";
-}
 
 int main()
 {
@@ -54,6 +15,12 @@ int main()
     std::string raw_input;
     std::stringstream ss;
     std::vector<std::string> input;
+
+    std::vector<std::string> path;
+    get_path_env(path);
+
+    // for (auto i : path)
+    //     std::cout << i << "\n";
 
     while (1)
     {
@@ -83,7 +50,7 @@ int main()
         {
             if (input.size() == 1)
                 continue;
-            handle_type(input[1]);
+            handle_type(input[1], path);
         }
         else
         {
