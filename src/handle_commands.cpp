@@ -1,6 +1,7 @@
 #include "handle_commands.h"
 #include "utils.h"
 
+#include <cstddef>
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
@@ -77,6 +78,10 @@ void handle_pwd()
 void handle_cd(std::vector<std::string> &input)
 {
     std::string to_string = (input.size() == 1 ? "~" : input[1]);
+
+    if (to_string == "~")
+        to_string = std::getenv("HOME");
+
     std::filesystem::path to(to_string);
 
     try
