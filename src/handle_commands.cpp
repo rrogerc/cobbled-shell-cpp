@@ -76,7 +76,8 @@ void handle_pwd()
 
 void handle_cd(std::vector<std::string> &input)
 {
-    std::string to_string = (input.size() == 1 ? "~" : input[1]);
+    std::u16string to_string = (input.size() == 1 ? u"~" : std::u16string(input[1].begin(), input[1].end()));
+    std::string print_string = (input.size() == 1 ? "~" : input[1]);
     std::filesystem::path to(to_string);
 
     try
@@ -85,6 +86,6 @@ void handle_cd(std::vector<std::string> &input)
     }
     catch (std::exception &e)
     {
-        std::cout << "cd: " << to_string << ": No such file or directory\n";
+        std::cout << "cd: " << print_string << ": No such file or directory\n";
     }
 }
