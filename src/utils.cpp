@@ -29,3 +29,35 @@ std::string find_path(std::string command, std::vector<std::string> &path)
     }
     return "";
 }
+
+#include <iostream>
+
+void parse_input(std::string raw_input, std::vector<std::string> &input)
+{
+    input.clear();
+    std::string cur = "";
+    bool is_quote = false;
+
+    raw_input += ' ';
+
+    for (int i = 0; i < raw_input.length(); i++)
+    {
+        if (raw_input[i] == '\'')
+        {
+            if (is_quote)
+                input.push_back(cur), cur = "";
+            is_quote = !is_quote;
+            continue;
+        }
+
+        if (is_quote)
+            cur += raw_input[i];
+        else if (raw_input[i] != ' ')
+            cur += raw_input[i];
+        else if (cur != "")
+            input.push_back(cur), cur = "";
+    }
+
+    // for (auto i : input)
+    //     std::cout << i << "\n";
+}

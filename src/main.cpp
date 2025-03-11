@@ -3,7 +3,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <sstream>
 #include <vector>
 
 int main()
@@ -13,7 +12,6 @@ int main()
     std::cerr << std::unitbuf;
 
     std::string raw_input;
-    std::stringstream ss;
     std::vector<std::string> input;
 
     std::vector<std::string> path;
@@ -22,15 +20,8 @@ int main()
     while (1)
     {
         std::cout << "$ ";
-
         std::getline(std::cin, raw_input);
-        ss.clear();
-        ss.str(raw_input);
-        input.clear();
-
-        std::string tmp;
-        while (ss >> tmp)
-            input.push_back(tmp);
+        parse_input(raw_input, input);
 
         if (input.size() == 0)
             break;
