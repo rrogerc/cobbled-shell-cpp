@@ -52,7 +52,11 @@ void parse_input(std::string raw_input, std::vector<std::string> &input)
         }
 
         if (is_quote || raw_input[i] != ' ')
+        {
+            if (raw_input[i] == '\\')
+                i++;
             cur += raw_input[i];
+        }
         else if (cur != "")
             input.push_back(cur), cur = "";
     }
