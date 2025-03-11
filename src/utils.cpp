@@ -36,7 +36,6 @@ void parse_input(std::string raw_input, std::vector<std::string> &input)
 {
     input.clear();
     std::string cur = "";
-    bool is_quote = false;
 
     raw_input += ' ';
 
@@ -45,20 +44,31 @@ void parse_input(std::string raw_input, std::vector<std::string> &input)
         if (raw_input[i] == '\'' || raw_input[i] == '"')
         {
             int j = i + 1;
+            cur += raw_input[i];
             while (raw_input[j] != raw_input[i])
+            {
+                if (raw_input[i] == '"' && raw_input[j] == '\\')
+                    cur += raw_input[j++];
                 cur += raw_input[j++];
+            }
+            cur += raw_input[i];
             i = j;
+            input.push_back(cur), cur = "";
             continue;
         }
 
-        if (is_quote || raw_input[i] != ' ')
+        if (raw_input[i] != ' ')
         {
             if (raw_input[i] == '\\')
                 i++;
             cur += raw_input[i];
         }
         else if (cur != "")
+        {
             input.push_back(cur), cur = "";
+            if (input.size() > 0 && input[input.size() - 1] != " ")
+                input.push_back(" ");
+        }
     }
 
     // for (auto i : input)
