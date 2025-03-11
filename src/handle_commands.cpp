@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -24,12 +25,57 @@ void handle_exit(std::string code)
     exit(error_code);
 }
 
-void handle_echo(std::vector<std::string> &args)
+void handle_echo(std::vector<std::string> &input)
 {
-    int n = args.size();
+    int n = input.size();
+    std::set<char> special_back = {'\\', '$', '\"'};
 
     for (int i = 1; i < n; i++)
-        std::cout << args[i] << " ";
+    {
+        if (input[i][0] == '\'')
+            std::cout << input[i].substr(1, input[i].length() - 2);
+        else if (input[i][0] == '\"')
+        {
+            std::vector<std::string> parsed;
+            std::string cur = input[i], cur_parse = "";
+
+            while (cur.length())
+            {
+                if (cur[0] == '\"')
+                {
+                    int j = cur.find('\"', 1);
+                    while (cur[j - 1] == '\\')
+                        j = cur.find('\"', j + 1);
+
+                    parsed.push_back(cur.substr(1, j - 1));
+                    cur.erase(0, j + 1);
+                }
+                else
+                {
+                    int j = cur.find('\"', 1);
+                    while (cur[j - 1] == '\\' && j != cur.length())
+                        j = cur.find('\"', j + 1);
+
+                    if (j == cur.length())
+                    {
+                        parsed.push_back(cur.substr(0, j));
+                        cur.erase(0, j);
+                    }
+                    else
+                    {
+                        parsed.push_back(cur.substr(0, j - 1));
+                        cur.erase(0, j);
+                    }
+                }
+            }
+            for (auto i : parsed)
+                std::cout << i;
+            std::cout << " ";
+        }
+        else
+            std::cout << input[i] << " ";
+    }
+
     std::cout << "\n";
 }
 
@@ -64,7 +110,7 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
     std::string command = input[0];
 
     for (int i = 1; i < input.size(); i++)
-        command += " \"" + input[i] + '"';
+        command += " " + input[i];
 
     // std::cout << command << "\n";
 
