@@ -26,8 +26,8 @@ int main()
         if (input.size() == 0)
             break;
 
-        // for (auto i : input)
-        //     std::cout << i << "\n";
+        for (auto i : input)
+            std::cout << i << "\n";
 
         if (input[0] == "exit")
         {
