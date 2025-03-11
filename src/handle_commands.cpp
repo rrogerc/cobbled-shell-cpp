@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -24,12 +25,30 @@ void handle_exit(std::string code)
     exit(error_code);
 }
 
-void handle_echo(std::vector<std::string> &args)
+void handle_echo(std::vector<std::string> &input)
 {
-    int n = args.size();
+    int n = input.size();
+    std::set<char> special_back = {'\\', '$', '\"'};
 
     for (int i = 1; i < n; i++)
-        std::cout << args[i] << " ";
+    {
+        if (input[i][0] == '\'')
+            std::cout << input[i].substr(1, input[i].length() - 2);
+        else if (input[i][0] == '\"')
+        {
+            std::string out = "";
+            for (int j = 1; j < input[i].length() - 1; j++)
+            {
+                if (input[i][j] == '\\' && special_back.count(input[i][j + 1]))
+                    j++;
+                if (j < input[i].length() - 1)
+                    out += input[i][j];
+            }
+            std::cout << out << " ";
+        }
+        else
+            std::cout << input[i] << " ";
+    }
     std::cout << "\n";
 }
 
@@ -64,7 +83,7 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
     std::string command = input[0];
 
     for (int i = 1; i < input.size(); i++)
-        command += " \"" + input[i] + '"';
+        command += " " + input[i];
 
     // std::cout << command << "\n";
 
