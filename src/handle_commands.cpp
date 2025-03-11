@@ -63,7 +63,7 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
     std::string command = input[0];
 
     for (int i = 1; i < input.size(); i++)
-        command += " " + input[i];
+        command += " '" + input[i] + "'";
 
     std::system(command.c_str());
 
