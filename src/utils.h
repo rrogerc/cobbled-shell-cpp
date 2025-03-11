@@ -6,5 +6,6 @@
 
 void get_path_env(std::vector<std::string> &path);
 std::string find_path(std::string command, std::vector<std::string> &path);
+void parse_input(std::string raw_input);
 
 #endif
