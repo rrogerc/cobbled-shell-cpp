@@ -46,7 +46,11 @@ void parse_input(std::string raw_input, std::vector<std::string> &input)
         {
             int j = i + 1;
             while (raw_input[j] != raw_input[i])
+            {
+                if (raw_input[i] == '"' && raw_input[j] == '\\')
+                    j++;
                 cur += raw_input[j++];
+            }
             i = j;
             continue;
         }
