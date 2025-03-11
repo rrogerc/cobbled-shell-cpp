@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <string>
 #include <vector>
 
 void handle_exit(std::string code)
@@ -63,7 +64,11 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
     std::string command = input[0];
 
     for (int i = 1; i < input.size(); i++)
-        command += " '" + input[i] + "'";
+    {
+        command += ' ' + '"';
+        command += input[i] + '"';
+    }
+    std::cout << command << "\n";
 
     std::system(command.c_str());
 
