@@ -42,9 +42,12 @@ void parse_input(std::string raw_input, std::vector<std::string> &input)
 
     for (int i = 0; i < raw_input.length(); i++)
     {
-        if (raw_input[i] == '\'')
+        if (raw_input[i] == '\'' || raw_input[i] == '"')
         {
-            is_quote = !is_quote;
+            int j = i + 1;
+            while (raw_input[j] != raw_input[i])
+                cur += raw_input[j++];
+            i = j;
             continue;
         }
 
@@ -57,5 +60,3 @@ void parse_input(std::string raw_input, std::vector<std::string> &input)
     // for (auto i : input)
     //     std::cout << i << "\n";
 }
-
-// echo '/tmp/quz/f   55' '/tmp/quz/f   44' '/tmp/quz/f   40' cat '/tmp/quz/f   55' '/tmp/quz/f   44' '/tmp/quz/f   40'
