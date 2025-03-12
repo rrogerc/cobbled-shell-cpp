@@ -31,8 +31,13 @@ void handle_echo(std::vector<std::string> &input) {
     std::set<char> special_back = {'\\', '$', '\"'};
 
     for (int i = 2; i < n; i++) {
-        if (input[i] == ">" || input[i] == "1>" || input[i] == "2>") {
+        if (input[i] == ">" || input[i] == "1>") {
             file_output = input[i + 2];
+            break;
+        }
+        if (input[i] == "2>") {
+            file_output = input[i + 2];
+            output = "";
             break;
         }
 
