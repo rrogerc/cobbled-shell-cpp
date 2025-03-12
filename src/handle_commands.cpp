@@ -24,15 +24,21 @@ void handle_exit(std::string code) {
 
 void handle_echo(std::vector<std::string> &input) {
     int n = input.size();
+    std::set<char> special_back = {'\\', '$', '\"'};
 
     std::string file_output = "";
     std::string output = "";
-
-    std::set<char> special_back = {'\\', '$', '\"'};
+    int redirect = 0;
 
     for (int i = 2; i < n; i++) {
-        if (input[i] == ">" || input[i] == "1>" || input[i] == "2>") {
+        if (input[i] == ">" || input[i] == "1>") {
             file_output = input[i + 2];
+            redirect = 1;
+            break;
+        }
+        if (input[i] == "2>") {
+            file_output = input[i + 2];
+            redirect = 2;
             break;
         }
 
@@ -55,7 +61,7 @@ void handle_echo(std::vector<std::string> &input) {
 
     output += "\n";
 
-    if (file_output != "") {
+    if (file_output != "" && redirect == 1) {
         std::ofstream file(file_output);
 
         if (file.is_open()) {
