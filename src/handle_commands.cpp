@@ -71,6 +71,8 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
         return false;
 
     std::string command = input[0];
+    if (input[0][0] == '\'' || input[0][0] == '"')
+        command = command.substr(1, command.length() - 2);
 
     for (int i = 1; i < input.size(); i++)
         command += " " + input[i];
