@@ -4,8 +4,8 @@
 #include <cstddef>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -23,27 +23,31 @@ void handle_exit(std::string code) {
 
 void handle_echo(std::vector<std::string> &input) {
     int n = input.size();
-    std::set<char> special_back = {'\\', '$', '\"'};
+
+    std::string file_output = "";
+    std::string output = "";
 
     for (int i = 2; i < n; i++) {
-        if (input[i][0] == '\'' && input[i][input[i].length() - 1] == '\'')
-            std::cout << input[i].substr(1, input[i].length() - 2);
-        else if (input[i][0] == '\"' && input[i][input[i].length() - 1] == '\"') {
-            std::string cur = input[i], cur_parse = "";
-
-            for (int j = 1; j < cur.length() - 1; j++) {
-                if (cur[j] == '\\') {
-                    cur_parse += cur[++j];
-                    continue;
-                }
-                cur_parse += cur[j];
-            }
-            std::cout << cur_parse;
-        } else
-            std::cout << input[i];
+        if (input[i] == ">" || input[i] == "1>" || input[i] == "2>") {
+            file_output = input[i + 2];
+            break;
+        }
+        if (input[i][0] == '\'' || input[i][0] == '\"')
+            output += input[i].substr(1, input[i].length() - 2);
+        else
+            output += input[i];
     }
+    output += "\n";
 
-    std::cout << "\n";
+    if (file_output != "") {
+        std::ofstream file(file_output);
+
+        if (file.is_open()) {
+            file << output;
+            file.close();
+        }
+    } else
+        std::cout << output;
 }
 
 void handle_type(std::string command, std::vector<std::string> &path) {
@@ -66,7 +70,6 @@ void handle_type(std::string command, std::vector<std::string> &path) {
 }
 
 bool handle_execution(std::vector<std::string> &input, std::vector<std::string> &path) {
-
     std::string command = input[0];
     if (input[0][0] == '\'' || input[0][0] == '"')
         command = input[0].substr(1, command.length() - 2);
@@ -79,8 +82,6 @@ bool handle_execution(std::vector<std::string> &input, std::vector<std::string> 
 
     for (int i = 1; i < input.size(); i++)
         command += " " + input[i];
-
-    // std::cout << command << "\n";
 
     std::system(command.c_str());
 
