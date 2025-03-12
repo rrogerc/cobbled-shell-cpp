@@ -66,11 +66,18 @@ void handle_type(std::string command, std::vector<std::string> &path) {
 }
 
 bool handle_execution(std::vector<std::string> &input, std::vector<std::string> &path) {
-    std::string execution_path = find_path(input[0], path);
-    if (execution_path == "")
-        return false;
 
     std::string command = input[0];
+    if (input[0][0] == '\'' || input[0][0] == '"') {
+        // command = input[0].substr(1, command.length() - 2);
+        // std::cout << "ASDASD\n";
+    }
+    // std::cout << command << "  asd\n";
+
+    std::string execution_path = find_path(command, path);
+    command = input[0];
+    if (execution_path == "")
+        return false;
 
     for (int i = 1; i < input.size(); i++)
         command += " " + input[i];
