@@ -15,11 +15,12 @@ void get_path_env(std::vector<std::string> &path) {
     }
 }
 
+#include <iostream>
 std::string find_path(std::string command, std::vector<std::string> &path) {
     std::string full_path;
     for (int i = 0; i < path.size(); i++) {
         full_path = path[i] + "/" + command;
-
+        std::cout << full_path << "\n";
         if (std::filesystem::exists(full_path))
             return full_path;
     }
