@@ -24,15 +24,26 @@ void handle_exit(std::string code) {
 
 void handle_echo(std::vector<std::string> &input) {
     int n = input.size();
+    std::set<char> special_back = {'\\', '$', '\"'};
 
     std::string file_output = "";
     std::string output = "";
-
-    std::set<char> special_back = {'\\', '$', '\"'};
+    int redirect = 0;
+    bool append = false;
 
     for (int i = 2; i < n; i++) {
-        if (input[i] == ">" || input[i] == "1>" || input[i] == "2>") {
+        if (input[i] == ">" || input[i] == "1>" || input[i] == ">>" || input[i] == "1>>") {
             file_output = input[i + 2];
+            redirect = 1;
+            if (input[i] == ">>" || input[i] == "1>>")
+                append = true;
+            break;
+        }
+        if (input[i] == "2>" || input[i] == "2>>") {
+            file_output = input[i + 2];
+            redirect = 2;
+            if (input[i] == "2>>")
+                append = true;
             break;
         }
 
@@ -56,11 +67,26 @@ void handle_echo(std::vector<std::string> &input) {
     output += "\n";
 
     if (file_output != "") {
-        std::ofstream file(file_output);
+
+        std::ofstream file;
+        if (!append)
+            file = std::ofstream(file_output);
+        else
+            file = std::ofstream(file_output, std::ios_base::app);
+
+        auto cur_buffer = std::cerr.rdbuf();
+
+        if (redirect == 2)
+            std::cerr.rdbuf(file.rdbuf());
 
         if (file.is_open()) {
-            file << output;
+            if (redirect == 1)
+                file << output;
             file.close();
+        }
+        if (redirect == 2) {
+            std::cerr.rdbuf(cur_buffer);
+            std::cout << output;
         }
     } else
         std::cout << output;
