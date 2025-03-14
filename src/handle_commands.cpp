@@ -1,7 +1,6 @@
 #include "handle_commands.h"
 #include "utils.h"
 
-#include <cstddef>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
